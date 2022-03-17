@@ -1,7 +1,5 @@
 package components;
 
-import util.Parser;
-
 public class King extends ChessPiece{
 	// x_position
 	// y_position
@@ -15,11 +13,20 @@ public class King extends ChessPiece{
 		super.hmoves = new int[]{-1,0,1,0};	// up,right,down,left
 		super.vmoves = new int[]{ 0,1,0,-1};	// up,right,down,left
 	}
+	
+	public boolean canMoveTo(String target, String[][] board) {
+		return super.canMoveTo(target, board);
+	}
+	
+	public boolean canCapture(String target, String[][] board) {
+		return super.canCapture(target, board);
+	}
+	
 	public static void main(String[] args) {
 		King test = new King(7,4,'K',1);
 		System.out.println("King");
 		System.out.println(test.stringPosition());
-		Parser.printArray(test.getValidMoves());
+//		Parser.printArray(test.getValidMoves());
 	}
 	
 

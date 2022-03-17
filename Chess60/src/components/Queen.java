@@ -1,7 +1,5 @@
 package components;
 
-import util.Parser;
-
 public class Queen extends ChessPiece{
 	private static final int MOVES = 8;
 	private static final int SCALAR = 8;
@@ -12,13 +10,22 @@ public class Queen extends ChessPiece{
 		super.vmoves = new int[]{ 0, 1,1,1,0,-1,-1,-1};	// up,right,down,left
 
 	}
-	public String[] getValidMoves() {
-		return super.getValidMoves(MAX_MOVES, SCALAR);
+	
+	public boolean canMoveTo(String target, String[][] board) {
+		return super.canMoveTo(SCALAR, target, board);
+	}
+	
+	public boolean canCapture(String target, String[][] board) {
+		return super.canCapture(SCALAR, target, board);
+	}
+	
+	public String[] getValidMoves(String[][] board) {
+		return super.getValidMoves(MAX_MOVES, SCALAR, board);
 	}
 	public static void main(String[] args) {
 		System.out.println("Queen");
 		Queen test = new Queen(7,3,'Q',1);
 		System.out.println(test.stringPosition());
-		Parser.printArray(test.getValidMoves());
+//		Parser.printArray(test.getValidMoves());
 	}
 }

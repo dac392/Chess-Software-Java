@@ -1,7 +1,5 @@
 package components;
 
-import util.Parser;
-
 public class Knight extends ChessPiece{
 	private final static int MOVES = 8;
 //	private final static int SCALAR = 8;
@@ -12,10 +10,18 @@ public class Knight extends ChessPiece{
 		super.vmoves = new int[]{ 1, 2, 2, 1,-1,-2,-2,-1};	// up,right,down,left
 	}
 	
+	public boolean canMoveTo(String target, String[][] board) {
+		return super.canMoveTo(target, board);
+	}
+	
+	public boolean canCapture(String target, String[][] board) {
+		return super.canCapture(target, board);
+	}
+	
 	public static void main(String[] args) {
 		Knight test = new Knight(5,2,'N',1);
 		System.out.println("Knight");
 		System.out.println(test.stringPosition());
-		Parser.printArray(test.getValidMoves());
+//		Parser.printArray(test.getValidMoves());
 	}
 }
