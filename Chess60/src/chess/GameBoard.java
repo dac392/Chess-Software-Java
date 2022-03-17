@@ -122,16 +122,15 @@ public class GameBoard {
 //			System.out.println(!this.emptySpot(end)); 
 //			System.out.println(enemyTeam.containsKey(end));
 			if(!this.emptySpot(end) && enemyTeam.containsKey(end)) {
-				System.out.println("Check");
 				if(p.canCapture(end, this.gameBoard)) {
-					this.move(p,end, inputs, allyTeam);
+					this.move(p,initial, end, inputs, allyTeam);
 					enemyTeam.remove(end);
 					this.player*=-1;
 					return true;
 				}
 			}else if(this.emptySpot(end)) {
 				if(p.canMoveTo(end, this.gameBoard)) {
-					this.move(p,end, inputs, allyTeam);
+					this.move(p,initial, end, inputs, allyTeam);
 					this.player*=-1;
 					return true;
 				}
@@ -142,7 +141,7 @@ public class GameBoard {
 		return false;
 	}
 	
-	private void move(ChessPiece p, String target, String[] inputs, HashMap<String, ChessPiece> allyTeam) {
+	private void move(ChessPiece p, String source, String target, String[] inputs, HashMap<String, ChessPiece> allyTeam) {
 		int[] origin = p.getPosition();
 		int[] dest = Parser.translate(target);
 		this.gameBoard[origin[0]][origin[1]] = "";
@@ -150,14 +149,18 @@ public class GameBoard {
 		p.updatePosition(dest);
 //		System.out.println("this should have changed");
 //		System.out.println(java.util.Arrays.toString(p.getPosition()));
-		allyTeam.remove(target);	//hm shouldn't this be initial?
+//		System.out.println("before " + allyTeam.keySet());
+		allyTeam.remove(source);	//hm shouldn't this be initial?
 		allyTeam.put(target, p);
+//		System.out.println(allyTeam.keySet());
 		if(p instanceof Pawn) {
 			char promotionType = ((Pawn)p).wasMoved(inputs);
 			if(promotionType != Parser.INVALID_CHAR) {
 				allyTeam.remove(target);
-				ChessPiece promoted = Parser.getNewPiece(promotionType, promotionType, promotionType);
+				ChessPiece promoted = Parser.getNewPiece(promotionType, p);
 				allyTeam.put(target, promoted);
+				this.gameBoard[dest[0]][dest[1]] = promoted.toString();
+				
 			}
 		}
 	}

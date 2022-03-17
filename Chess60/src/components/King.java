@@ -6,12 +6,12 @@ public class King extends ChessPiece{
 	// h_moves
 	// v_moves
 	// name
-	private final static int MOVES = 4;
+	private final static int MOVES = 8;
 	
 	public King(int x,int y, char type, int player) {
 		super(x,y, type, player, MOVES);
-		super.hmoves = new int[]{-1,0,1,0};	// up,right,down,left
-		super.vmoves = new int[]{ 0,1,0,-1};	// up,right,down,left
+		super.hmoves = new int[]{-1,-1,0,1,1, 1,0, -1};	// up,right,down,left
+		super.vmoves = new int[]{ 0, 1,1,1,0,-1,-1,-1};	// up,right,down,left
 	}
 	
 	public boolean canMoveTo(String target, String[][] board) {

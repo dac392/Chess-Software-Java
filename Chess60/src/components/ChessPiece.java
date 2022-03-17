@@ -106,6 +106,8 @@ public class ChessPiece {
 					String posible_move = Parser.translate(tempX,tempY);
 					if(posible_move.equals(end))
 						return true;
+					if(!spot.isBlank() && spot.contains(this.enemy) && !posible_move.equals(end))
+						break;
 				}
 			}
 		}

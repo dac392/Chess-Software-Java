@@ -50,6 +50,7 @@ public class Parser {
 		int i = positions[0];
 		int j = positions[1];
 		int p = old.playerColor;
+		System.out.println("yes, we are here and type is: "+type);
 		ChessPiece statement = null;
 		switch(type) {
 		case 'R':
@@ -63,6 +64,7 @@ public class Parser {
 			break;
 		case 'Q':
 			statement = new Queen(i,j,type,p);
+			System.out.println("yes, we made a queen");
 			break;
 		case 'K':
 			statement = new King(i,j,type,p);
