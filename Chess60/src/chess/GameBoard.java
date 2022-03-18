@@ -11,7 +11,8 @@ public class GameBoard {
 	private HashMap<String, ChessPiece> black;
 	private String gameBoard [][];
 	private int player;
-	
+	int[] whiteKingPosition;
+	int[] blackKingPosition;
 	private static final int BOARD_SIZE = 8;
 	private static final int BLACK_THRESH = 2;
 	private static final int WHITE_THRESH = 6;
@@ -40,10 +41,17 @@ public class GameBoard {
 					ChessPiece blackpiece = Parser.getNewPiece(i,j,PLAYER_2);
 					this.gameBoard[i][j] = blackpiece.toString();
 					this.black.put(blackpiece.stringPosition(), blackpiece);
+					if(blackpiece.name.equals("bK")) {
+						blackKingPosition = blackpiece.getPosition();
+						
+					}
 				}else if(i >= WHITE_THRESH) {
 					ChessPiece whitepiece = Parser.getNewPiece(i, j, PLAYER_1);
 					this.gameBoard[i][j] = whitepiece.toString();
 					this.white.put(whitepiece.stringPosition(), whitepiece);
+					if(whitepiece.name.equals("wK")) {
+						whiteKingPosition = whitepiece.getPosition();
+					}
 				}else {
 					this.gameBoard[i][j] = "";
 				}
@@ -78,6 +86,7 @@ public class GameBoard {
 			System.out.print(letter);
 		}
 		System.out.println();
+		
 	}
 
 	public void printHashMaps() {
@@ -124,13 +133,48 @@ public class GameBoard {
 			if(!this.emptySpot(end) && enemyTeam.containsKey(end)) {
 				if(p.canCapture(end, this.gameBoard)) {
 					this.move(p,initial, end, inputs, allyTeam);
+					ChessPiece removed = enemyTeam.get(end);
 					enemyTeam.remove(end);
+					
+					if(p.name.equals("bK"))
+						blackKingPosition = p.getPosition();
+					if(p.name.equals("wK"))
+						whiteKingPosition = p.getPosition();	
+					
+					if(player == PLAYER_1 && whiteKingCheck()) {         //These two methods will probably screw up with the pawn promotion....
+						this.move(p, end,initial, inputs, allyTeam);
+						enemyTeam.put(end, removed);
+						return false;
+					}
+					
+					if(player == PLAYER_2 && blackKingCheck()) {
+						this.move(p, end,initial, inputs, allyTeam);
+						enemyTeam.put(end, removed);
+						return false;
+					}
 					this.player*=-1;
 					return true;
 				}
 			}else if(this.emptySpot(end)) {
 				if(p.canMoveTo(end, this.gameBoard)) {
 					this.move(p,initial, end, inputs, allyTeam);
+					
+					if(p.name.equals("bK"))
+						blackKingPosition = p.getPosition();
+					if(p.name.equals("wK"))
+						whiteKingPosition = p.getPosition();
+
+					if(player == PLAYER_1 && whiteKingCheck())
+					{
+						this.move(p, end,initial, inputs, allyTeam);
+						return false;
+					}
+					
+					if(player == PLAYER_2 && blackKingCheck()) {
+						this.move(p, end,initial, inputs, allyTeam);
+						return false;
+					}
+					
 					this.player*=-1;
 					return true;
 				}
@@ -141,6 +185,373 @@ public class GameBoard {
 		return false;
 	}
 	
+	//theoretically should work
+	public boolean whiteKingCheck() {
+		this.gameBoard = gameBoard;
+		int whiteKingX = whiteKingPosition[0];
+		int whiteKingY = whiteKingPosition[1];
+		//Rook+Queen+King Check
+			boolean first = true;
+			for(int x = whiteKingX-1; x >= 0; x--) {
+				String attacker = this.gameBoard[x][whiteKingY]; 
+				if(attacker.contains("w")) {
+					break;
+				}
+				if(attacker.contains("b")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+			first = true;
+			for(int x = whiteKingX+1; x <= 7; x++) {
+				String attacker = this.gameBoard[x][whiteKingY]; 
+				if(attacker.contains("w")) {
+					break;
+				}
+				if(attacker.contains("b")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+			first = true;
+			for(int x = whiteKingY-1; x >= 0; x--) {
+				String attacker = this.gameBoard[whiteKingX][x]; 
+				if(attacker.contains("w")) {
+					break;
+				}
+				if(attacker.contains("b")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+			first = true;
+			for(int x = whiteKingY+1; x <= 7; x++) {
+				String attacker = this.gameBoard[whiteKingX][x]; 
+				if(attacker.contains("w")) {
+					break;
+				}
+				if(attacker.contains("b")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+		//Pawn+King Check
+			if((whiteKingX-1 >= 0)) {
+				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bp") ||this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bK"))) 
+					return true;
+				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bK")))
+					return true;
+			}
+			
+			if((whiteKingX+1 <= 7)) {
+				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bK"))) 
+					return true;
+				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bK")))
+					return true;
+			}
+		
+		//Bishop+Queen Check
+			int diagonalX = whiteKingX+1;
+			int diagonalY = whiteKingY+1;
+			while(diagonalX <=7 && diagonalY <= 7){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("w")) 
+					break;
+				if(attacker.contains("b")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX++;
+				diagonalY++;
+			}
+			
+			diagonalX = whiteKingX+1;
+			diagonalY = whiteKingY-1;
+			while(diagonalX <=7 && diagonalY >= 0){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("w")) 
+					break;
+				if(attacker.contains("b")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX++;
+				diagonalY--;
+			}
+			
+			diagonalX = whiteKingX-1;
+			diagonalY = whiteKingY+1;
+			while(diagonalX >=0 && diagonalY <= 7){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("w")) 
+					break;
+				if(attacker.contains("b")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX--;
+				diagonalY++;
+			}
+			
+			diagonalX = whiteKingX-1;
+			diagonalY = whiteKingY-1;
+			while(diagonalX >=0 && diagonalY >= 0){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("w")) 
+					break;
+				if(attacker.contains("b")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX--;
+				diagonalY--;
+			}
+		//Knight Check
+			if(whiteKingX+2 <= 7)
+			{
+				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX+2][whiteKingY+1].equals("bN"))
+					return true;
+				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX+2][whiteKingY-1].equals("bN"))
+					return true;
+			}
+			if(whiteKingX-2 >= 0)
+			{
+				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX-2][whiteKingY+1].equals("bN"))
+					return true;
+				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX-2][whiteKingY-1].equals("bN"))
+					return true;
+			}
+			if(whiteKingY+2 <= 7)
+			{
+				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY+2].equals("bN"))
+					return true;
+				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY+2].equals("bN"))
+					return true;
+			}	
+			if(whiteKingY-2 >= 0)
+			{
+				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY-2].equals("bN"))
+					return true;
+				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY-2].equals("bN"))
+					return true;
+			}		
+		return false;
+	}
+	
+	public boolean blackKingCheck() {	
+		int blackKingX = blackKingPosition[0];
+		int blackKingY = blackKingPosition[1];
+		//Rook+Queen+King Check
+			boolean first = true;
+			for(int x = blackKingX-1; x >= 0; x--) {
+				String attacker = this.gameBoard[x][blackKingY]; 
+				if(attacker.contains("b")) {
+					break;
+				}
+				if(attacker.contains("w")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+			first = true;
+			for(int x = blackKingX+1; x <= 7; x++) {
+				String attacker = this.gameBoard[x][blackKingY]; 
+				if(attacker.contains("b")) {
+					break;
+				}
+				if(attacker.contains("w")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+			first = true;
+			for(int x = blackKingY-1; x >= 0; x--) {
+				String attacker = this.gameBoard[blackKingX][x]; 
+				if(attacker.contains("b")) {
+					break;
+				}
+				if(attacker.contains("w")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+			first = true;
+			for(int x = blackKingY+1; x <= 7; x++) {
+				String attacker = this.gameBoard[blackKingX][x]; 
+				if(attacker.contains("b")) {
+					break;
+				}
+				if(attacker.contains("w")) {
+					if(attacker.contains("R") || attacker.contains("Q"))
+						return true;
+					else if(first && attacker.contains("K"))
+						return true;
+					else
+						break;
+				}
+				first = false;
+			}
+			
+		//Pawn+King Check
+			if((blackKingX-1 >= 0)) {
+				if(blackKingY - 1 >= 0 && (this.gameBoard[blackKingX-1][blackKingY-1].equals("wp") ||this.gameBoard[blackKingX-1][blackKingY-1].equals("wK"))) 
+					return true;
+				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX-1][blackKingY+1].equals("wp") || this.gameBoard[blackKingX-1][blackKingY+1].equals("wK")))
+					return true;
+			}
+			
+			if((blackKingX+1 <= 7)) {
+				if(blackKingY - 1 >= 0 && (this.gameBoard[blackKingX+1][blackKingY-1].equals("wp") || this.gameBoard[blackKingX+1][blackKingY-1].equals("wK"))) 
+					return true;
+				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX+1][blackKingY+1].equals("wp") || this.gameBoard[blackKingX+1][blackKingY+1].equals("wK")))
+					return true;
+			}
+		
+		//Bishop+Queen Check
+			int diagonalX = blackKingX+1;
+			int diagonalY = blackKingY+1;
+			while(diagonalX <=7 && diagonalY <= 7){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("b")) 
+					break;
+				if(attacker.contains("w")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX++;
+				diagonalY++;
+			}
+			
+			diagonalX = blackKingX+1;
+			diagonalY = blackKingY-1;
+			while(diagonalX <=7 && diagonalY >= 0){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("b")) 
+					break;
+				if(attacker.contains("w")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX++;
+				diagonalY--;
+			}
+			
+			diagonalX = blackKingX-1;
+			diagonalY = blackKingY+1;
+			while(diagonalX >=0 && diagonalY <= 7){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("b")) 
+					break;
+				if(attacker.contains("w")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX--;
+				diagonalY++;
+			}
+			
+			diagonalX = blackKingX-1;
+			diagonalY = blackKingY-1;
+			while(diagonalX >=0 && diagonalY >= 0){
+				String attacker = this.gameBoard[diagonalX][diagonalY];
+				if(attacker.contains("b")) 
+					break;
+				if(attacker.contains("w")) {
+					if(attacker.contains("B") || attacker.contains("Q"))
+						return true;
+					else
+						break;
+				}
+				diagonalX--;
+				diagonalY--;
+			}
+		//Knight Check
+			if(blackKingX+2 <= 7)
+			{
+				if(blackKingY+1 <=7 && this.gameBoard[blackKingX+2][blackKingY+1].equals("wN"))
+					return true;
+				if(blackKingY-1 >=0 && this.gameBoard[blackKingX+2][blackKingY-1].equals("wN"))
+					return true;
+			}
+			if(blackKingX-2 >= 0)
+			{
+				if(blackKingY+1 <=7 && this.gameBoard[blackKingX-2][blackKingY+1].equals("wN"))
+					return true;
+				if(blackKingY-1 >=0 && this.gameBoard[blackKingX-2][blackKingY-1].equals("wN"))
+					return true;
+			}
+			if(blackKingY+2 <= 7)
+			{
+				if(blackKingX+1 <=7 && this.gameBoard[blackKingX+1][blackKingY+2].equals("wN"))
+					return true;
+				if(blackKingX-1 >=0 && this.gameBoard[blackKingX-1][blackKingY+2].equals("wN"))
+					return true;
+			}	
+			if(blackKingY-2 >= 0)
+			{
+				if(blackKingX+1 <=7 && this.gameBoard[blackKingX+1][blackKingY-2].equals("wN"))
+					return true;
+				if(blackKingX-1 >=0 && this.gameBoard[blackKingX-1][blackKingY-2].equals("wN"))
+					return true;
+			}		
+		return false;
+	}	
 	private void move(ChessPiece p, String source, String target, String[] inputs, HashMap<String, ChessPiece> allyTeam) {
 		int[] origin = p.getPosition();
 		int[] dest = Parser.translate(target);
@@ -164,6 +575,16 @@ public class GameBoard {
 			}
 		}
 	}
+	
+	public int[] getWhiteKing() {
+		System.out.println("White King is at x-"+whiteKingPosition[0]+" and y-"+whiteKingPosition[1]);
+		return whiteKingPosition;
+	}
+	public int[] getBlackKing() {
+		System.out.println("Black King is at x-"+blackKingPosition[0]+" and y-"+blackKingPosition[1]);
+		return blackKingPosition;
+	}
+	
 
 	private boolean emptySpot(String end) {
 		int[] position = Parser.translate(end);
