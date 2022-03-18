@@ -13,6 +13,8 @@ public class GameBoard {
 	private int player;
 	int[] whiteKingPosition;
 	int[] blackKingPosition;
+	String whitePosition;
+	String blackPosition;
 	private static final int BOARD_SIZE = 8;
 	private static final int BLACK_THRESH = 2;
 	private static final int WHITE_THRESH = 6;
@@ -43,6 +45,7 @@ public class GameBoard {
 					this.black.put(blackpiece.stringPosition(), blackpiece);
 					if(blackpiece.name.equals("bK")) {
 						blackKingPosition = blackpiece.getPosition();
+						blackPosition = blackpiece.stringPosition();
 						
 					}
 				}else if(i >= WHITE_THRESH) {
@@ -51,6 +54,7 @@ public class GameBoard {
 					this.white.put(whitepiece.stringPosition(), whitepiece);
 					if(whitepiece.name.equals("wK")) {
 						whiteKingPosition = whitepiece.getPosition();
+						whitePosition = whitepiece.stringPosition();
 					}
 				}else {
 					this.gameBoard[i][j] = "";
@@ -137,19 +141,45 @@ public class GameBoard {
 					enemyTeam.remove(end);
 					
 					if(p.name.equals("bK"))
+					{
 						blackKingPosition = p.getPosition();
+						blackPosition = p.stringPosition();
+					}
 					if(p.name.equals("wK"))
-						whiteKingPosition = p.getPosition();	
+					{
+						whiteKingPosition = p.getPosition();
+						whitePosition = p.stringPosition();
+					}
 					
 					if(player == PLAYER_1 && whiteKingCheck()) {         //These two methods will probably screw up with the pawn promotion....
 						this.move(p, end,initial, inputs, allyTeam);
 						enemyTeam.put(end, removed);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK"))
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
 						return false;
 					}
 					
-					if(player == PLAYER_2 && blackKingCheck()) {
+					if(player == PLAYER_2 && blackKingCheck()) {	
 						this.move(p, end,initial, inputs, allyTeam);
 						enemyTeam.put(end, removed);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK"))
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
 						return false;
 					}
 					this.player*=-1;
@@ -160,18 +190,44 @@ public class GameBoard {
 					this.move(p,initial, end, inputs, allyTeam);
 					
 					if(p.name.equals("bK"))
+					{
 						blackKingPosition = p.getPosition();
-					if(p.name.equals("wK"))
+						blackPosition = p.stringPosition();
+					}
+					if(p.name.equals("wK")) 
+					{
 						whiteKingPosition = p.getPosition();
+						whitePosition = p.stringPosition();
+					}
 
 					if(player == PLAYER_1 && whiteKingCheck())
 					{
 						this.move(p, end,initial, inputs, allyTeam);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK")) 
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
 						return false;
 					}
 					
 					if(player == PLAYER_2 && blackKingCheck()) {
 						this.move(p, end,initial, inputs, allyTeam);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK")) 
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
 						return false;
 					}
 					
@@ -184,10 +240,144 @@ public class GameBoard {
 		
 		return false;
 	}
-	
+
+	public boolean safeMove(String in, HashMap<String, ChessPiece> allyTeam, HashMap<String, ChessPiece> enemyTeam) { //Theoretically should perform a move and check if the king is safe. Regardless, should return board back to what it was before returning.
+		String[] inputs = in.split(" ");
+		String initial = inputs[0];
+		String end = inputs[1];
+//		System.out.println("allyTeam contains "+initial+" : "+allyTeam.containsKey(initial));
+//		System.out.println(allyTeam.keySet());
+		if(allyTeam.containsKey(initial)) {
+			ChessPiece p = allyTeam.get(initial);
+//			System.out.println(!this.emptySpot(end)); 
+//			System.out.println(enemyTeam.containsKey(end));
+			if(!this.emptySpot(end) && enemyTeam.containsKey(end)) {
+				if(p.canCapture(end, this.gameBoard)) {
+					this.move(p,initial, end, inputs, allyTeam);
+					ChessPiece removed = enemyTeam.get(end);
+					enemyTeam.remove(end);
+					
+					if(p.name.equals("bK"))
+					{
+						blackKingPosition = p.getPosition();
+						blackPosition = p.stringPosition();
+					}
+					if(p.name.equals("wK"))
+					{
+						whiteKingPosition = p.getPosition();
+						whitePosition = p.stringPosition();
+					}
+					
+					if(player == PLAYER_1 && whiteKingCheck()) {         //These two methods will probably screw up with the pawn promotion....
+						this.move(p, end,initial, inputs, allyTeam);
+						enemyTeam.put(end, removed);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK"))
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
+						return false;
+					}
+					
+					if(player == PLAYER_2 && blackKingCheck()) {	
+						this.move(p, end,initial, inputs, allyTeam);
+						enemyTeam.put(end, removed);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK"))
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
+						return false;
+					}
+					this.move(p, end,initial, inputs, allyTeam);
+					if(p.name.equals("bK"))
+					{
+						blackKingPosition = p.getPosition();
+						blackPosition = p.stringPosition();
+					}
+					if(p.name.equals("wK"))
+					{
+						whiteKingPosition = p.getPosition();
+						whitePosition = p.stringPosition();
+					}
+					enemyTeam.put(end, removed);
+				}
+			}else if(this.emptySpot(end)) {
+				if(p.canMoveTo(end, this.gameBoard)) {
+					this.move(p,initial, end, inputs, allyTeam);
+					
+					if(p.name.equals("bK"))
+					{
+						blackKingPosition = p.getPosition();
+						blackPosition = p.stringPosition();
+					}
+					if(p.name.equals("wK")) 
+					{
+						whiteKingPosition = p.getPosition();
+						whitePosition = p.stringPosition();
+					}
+
+					if(player == PLAYER_1 && whiteKingCheck())
+					{
+						this.move(p, end,initial, inputs, allyTeam);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK"))
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
+						return false;
+					}
+					
+					if(player == PLAYER_2 && blackKingCheck()) {
+						this.move(p, end,initial, inputs, allyTeam);
+						if(p.name.equals("bK"))
+						{
+							blackKingPosition = p.getPosition();
+							blackPosition = p.stringPosition();
+						}
+						if(p.name.equals("wK"))
+						{
+							whiteKingPosition = p.getPosition();
+							whitePosition = p.stringPosition();
+						}
+						return false;
+					}
+					this.move(p,initial, end, inputs, allyTeam);				
+					if(p.name.equals("bK"))
+					{
+						blackKingPosition = p.getPosition();
+						blackPosition = p.stringPosition();
+					}
+					if(p.name.equals("wK")) 
+					{
+						whiteKingPosition = p.getPosition();
+						whitePosition = p.stringPosition();
+					}
+
+				}
+			}
+			
+		}
+		
+		return true;
+	}	
 	//theoretically should work
 	public boolean whiteKingCheck() {
-		this.gameBoard = gameBoard;
 		int whiteKingX = whiteKingPosition[0];
 		int whiteKingY = whiteKingPosition[1];
 		//Rook+Queen+King Check
@@ -552,6 +742,38 @@ public class GameBoard {
 			}		
 		return false;
 	}	
+	
+	public boolean whiteNoPossibleMoves() { //W.I.P
+		String test = whitePosition;
+		HashMap<String, ChessPiece> allyTeam = this.white;
+		HashMap<String, ChessPiece> enemyTeam = this.black;
+		//Can the King move out of the way?
+		char letter = test.charAt(0);
+		char letterAfter = (char)(letter+1);
+		char letterBefore = (char)(letter-1);
+		int number = Integer.parseInt(test.substring(1));
+		
+		String initial = test + " " + letterBefore + number;
+		
+		if(safeMove(test + " " + letterBefore + number, allyTeam, enemyTeam) || safeMove(test + " " + letterBefore + (number-1), allyTeam, enemyTeam) || safeMove(test + " " + letterBefore + (number+1), allyTeam, enemyTeam)) {
+			return false;
+		}
+		
+		if(safeMove(test + " " + letter + (number-1), allyTeam, enemyTeam) || safeMove(test + " " + letter + (number+1), allyTeam, enemyTeam)) {
+			return false;
+		}
+		
+		if(safeMove(test + " " + letterAfter + number, allyTeam, enemyTeam) || safeMove(test + " " + letterAfter + (number-1), allyTeam, enemyTeam) || safeMove(test + " " + letterAfter + (number+1), allyTeam, enemyTeam)) {
+			return false;
+		}
+		
+		//Is there more than one attacker? If so and king cannot move, checkmate.
+		
+		//Can the attacker's path be blocked?
+		
+		//Can the attacker be captured?
+		return true;
+	}
 	private void move(ChessPiece p, String source, String target, String[] inputs, HashMap<String, ChessPiece> allyTeam) {
 		int[] origin = p.getPosition();
 		int[] dest = Parser.translate(target);

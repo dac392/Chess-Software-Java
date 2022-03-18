@@ -127,7 +127,9 @@ public class Chess {
 			}
 			if(chessboard.whiteKingCheck()) {
 				System.out.println("THE KING IS UNDER ATTACK!");
+				
 			}
+			System.out.println(chessboard.whiteNoPossibleMoves());
 //			break;
 		}
 		
