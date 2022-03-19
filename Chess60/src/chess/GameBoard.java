@@ -492,12 +492,12 @@ public class GameBoard {
 			
 		//Pawn+King Check
 			if((whiteKingX-1 >= 0)) {
-				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bp") ||this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bK"))){
+				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX-1][whiteKingY-1].contains("bp") ||this.gameBoard[whiteKingX-1][whiteKingY-1].contains("bK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX-1));
 				}
-				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bK"))){
+				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX-1));
@@ -505,12 +505,12 @@ public class GameBoard {
 			}
 			
 			if((whiteKingX+1 <= 7)) {
-				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bK"))){
+				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX+1][whiteKingY-1].contains("bp") || this.gameBoard[whiteKingX+1][whiteKingY-1].contains("bK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX+1));
 				}
-				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bK"))){
+				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX+1));
@@ -600,12 +600,12 @@ public class GameBoard {
 		//Knight Check
 			if(whiteKingX+2 <= 7)
 			{
-				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX+2][whiteKingY+1].equals("bN")){
+				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX+2][whiteKingY+1].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX+2));
 				}
-				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX+2][whiteKingY-1].equals("bN")){
+				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX+2][whiteKingY-1].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX+2));
@@ -613,12 +613,13 @@ public class GameBoard {
 			}
 			if(whiteKingX-2 >= 0)
 			{
-				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX-2][whiteKingY+1].equals("bN")){
+				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX-2][whiteKingY+1].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX-2));
 				}
-				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX-2][whiteKingY-1].equals("bN")){
+	
+				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX-2][whiteKingY-1].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX-2));
@@ -626,12 +627,12 @@ public class GameBoard {
 			}
 			if(whiteKingY+2 <= 7)
 			{
-				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY+2].equals("bN")){
+				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY+2].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+2]+(whiteKingX+1));
 				}
-				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY+2].equals("bN")){
+				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY+2].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+2]+(whiteKingX-1));
@@ -639,12 +640,12 @@ public class GameBoard {
 			}	
 			if(whiteKingY-2 >= 0)
 			{
-				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY-2].equals("bN")){
+				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY-2].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-2]+(whiteKingX+1));
 				}
-				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY-2].equals("bN")){
+				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY-2].contains("bN")){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-2]+(whiteKingX-1));
