@@ -388,7 +388,7 @@ public class GameBoard {
 		HashMap<String, ChessPiece> enemyTeam = this.black;
 		int attackers = 0;
 		boolean checked = false;
-		String letters[ ]= {"a", "b", "c", "d", "e", "f", "g", "h\n"};
+		String letters[ ]= {"a", "b", "c", "d", "e", "f", "g", "h"};
 		//Rook+Queen+King Check
 			boolean first = true;
 			for(int x = whiteKingX-1; x >= 0; x--) {
