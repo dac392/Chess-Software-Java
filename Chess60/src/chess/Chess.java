@@ -130,7 +130,11 @@ public class Chess {
 				System.out.println("Its over!");
 				game.ongoing = false;
 			}
-			
+			if(chessboard.blackKingCheck() && chessboard.blackNoPossibleMoves()) {
+				chessboard.printGameBoard();
+				System.out.println("Its over!");
+				game.ongoing = false;
+			}			
 //			break;
 		}
 		

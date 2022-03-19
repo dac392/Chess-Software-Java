@@ -243,13 +243,17 @@ public class GameBoard {
 		return false;
 	}
 
-	public boolean safeMove(String in, HashMap<String, ChessPiece> allyTeam, HashMap<String, ChessPiece> enemyTeam) { //Theoretically should perform a move and check if the king is safe. Regardless, should return board back to what it was before returning.
+	public boolean safeMove(String in, HashMap<String, ChessPiece> safe2, HashMap<String, ChessPiece> safe) { //Theoretically should perform a move and check if the king is safe. Regardless, should return board back to what it was before returning.
 		String[] inputs = in.split(" ");
 		String initial = inputs[0];
 		String end = inputs[1];
+		HashMap<String, ChessPiece> allyTeam = new HashMap<>();
+		allyTeam.putAll(safe2);
+		HashMap<String, ChessPiece> enemyTeam = new HashMap<>();
+		enemyTeam.putAll(safe);
 //		System.out.println("allyTeam contains "+initial+" : "+allyTeam.containsKey(initial));
 //		System.out.println(allyTeam.keySet());
-		if(allyTeam.containsKey(initial))
+		if(!this.emptySpot(end) && allyTeam.containsKey(end))
 			return false;
 		if(allyTeam.containsKey(initial)) {
 			ChessPiece p = allyTeam.get(initial);
@@ -361,7 +365,7 @@ public class GameBoard {
 						}
 						return false;
 					}
-					this.move(p,initial, end, inputs, allyTeam);				
+					this.move(p,end, initial, inputs, allyTeam);				
 					if(p.name.equals("bK"))
 					{
 						blackKingPosition = p.getPosition();
@@ -658,9 +662,14 @@ public class GameBoard {
 		return false;
 	}
 	
-	public boolean blackKingCheck() {	
+	public boolean blackKingCheck() {
 		int blackKingX = blackKingPosition[0];
 		int blackKingY = blackKingPosition[1];
+		HashMap<String, ChessPiece> allyTeam = this.black;
+		HashMap<String, ChessPiece> enemyTeam = this.white;
+		int attackers = 0;
+		boolean checked = false;
+		String letters[ ]= {"a", "b", "c", "d", "e", "f", "g", "h"};
 		//Rook+Queen+King Check
 			boolean first = true;
 			for(int x = blackKingX-1; x >= 0; x--) {
@@ -669,10 +678,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("w")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")) {
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[blackKingY]+(8-x));
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[blackKingY]+(8-x));
+						break;
+					}
 					else
 						break;
 				}
@@ -686,10 +703,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("w")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[blackKingY]+(8-x));
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[blackKingY]+(8-x));
+						break;
+					}
 					else
 						break;
 				}
@@ -703,10 +728,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("w")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+(8-blackKingX));
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+(8-blackKingX));
+						break;
+					}
 					else
 						break;
 				}
@@ -720,10 +753,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("w")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+(8-blackKingX));
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+(8-blackKingX));
+						break;
+					}
 					else
 						break;
 				}
@@ -732,17 +773,29 @@ public class GameBoard {
 			
 		//Pawn+King Check
 			if((blackKingX-1 >= 0)) {
-				if(blackKingY - 1 >= 0 && (this.gameBoard[blackKingX-1][blackKingY-1].equals("wp") ||this.gameBoard[blackKingX-1][blackKingY-1].equals("wK"))) 
-					return true;
-				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX-1][blackKingY+1].equals("wp") || this.gameBoard[blackKingX-1][blackKingY+1].equals("wK")))
-					return true;
+				if(blackKingY - 1 >= 0 && (this.gameBoard[blackKingX-1][blackKingY-1].contains("wp") ||this.gameBoard[blackKingX-1][blackKingY-1].contains("wK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY-1]+(8-(blackKingX-1)));
+				}
+				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX-1][blackKingY+1].contains("wp") || this.gameBoard[blackKingX-1][blackKingY+1].contains("wK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY+1]+(8-(blackKingX-1)));
+				}
 			}
 			
 			if((blackKingX+1 <= 7)) {
-				if(blackKingY - 1 >= 0 && (this.gameBoard[blackKingX+1][blackKingY-1].equals("wp") || this.gameBoard[blackKingX+1][blackKingY-1].equals("wK"))) 
-					return true;
-				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX+1][blackKingY+1].equals("wp") || this.gameBoard[blackKingX+1][blackKingY+1].equals("wK")))
-					return true;
+				if(blackKingY - 1 >= 0 && (this.gameBoard[blackKingX+1][blackKingY-1].contains("wp") || this.gameBoard[blackKingX+1][blackKingY-1].contains("wK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY-1]+(8-(blackKingX+1)));
+				}
+				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX+1][blackKingY+1].contains("wp") || this.gameBoard[blackKingX+1][blackKingY+1].contains("wK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY+1]+(8-(blackKingX+1)));
+				}
 			}
 		
 		//Bishop+Queen Check
@@ -753,8 +806,12 @@ public class GameBoard {
 				if(attacker.contains("b")) 
 					break;
 				if(attacker.contains("w")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -769,8 +826,12 @@ public class GameBoard {
 				if(attacker.contains("b")) 
 					break;
 				if(attacker.contains("w")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -785,8 +846,12 @@ public class GameBoard {
 				if(attacker.contains("b")) 
 					break;
 				if(attacker.contains("w")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -801,8 +866,12 @@ public class GameBoard {
 				if(attacker.contains("b")) 
 					break;
 				if(attacker.contains("w")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -812,33 +881,61 @@ public class GameBoard {
 		//Knight Check
 			if(blackKingX+2 <= 7)
 			{
-				if(blackKingY+1 <=7 && this.gameBoard[blackKingX+2][blackKingY+1].equals("wN"))
-					return true;
-				if(blackKingY-1 >=0 && this.gameBoard[blackKingX+2][blackKingY-1].equals("wN"))
-					return true;
+				if(blackKingY+1 <=7 && this.gameBoard[blackKingX+2][blackKingY+1].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY+1]+(8-(blackKingX+2)));
+				}
+				if(blackKingY-1 >=0 && this.gameBoard[blackKingX+2][blackKingY-1].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY-1]+(8-(blackKingX+2)));
+				}
 			}
 			if(blackKingX-2 >= 0)
 			{
-				if(blackKingY+1 <=7 && this.gameBoard[blackKingX-2][blackKingY+1].equals("wN"))
-					return true;
-				if(blackKingY-1 >=0 && this.gameBoard[blackKingX-2][blackKingY-1].equals("wN"))
-					return true;
+				if(blackKingY+1 <=7 && this.gameBoard[blackKingX-2][blackKingY+1].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY+1]+(8-(blackKingX-2)));
+				}
+	
+				if(blackKingY-1 >=0 && this.gameBoard[blackKingX-2][blackKingY-1].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY-1]+(8-(blackKingX-2)));
+				}
 			}
 			if(blackKingY+2 <= 7)
 			{
-				if(blackKingX+1 <=7 && this.gameBoard[blackKingX+1][blackKingY+2].equals("wN"))
-					return true;
-				if(blackKingX-1 >=0 && this.gameBoard[blackKingX-1][blackKingY+2].equals("wN"))
-					return true;
+				if(blackKingX+1 <=7 && this.gameBoard[blackKingX+1][blackKingY+2].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY+2]+(8-(blackKingX+1)));
+				}
+				if(blackKingX-1 >=0 && this.gameBoard[blackKingX-1][blackKingY+2].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY+2]+(8-(blackKingX-1)));
+				}
 			}	
 			if(blackKingY-2 >= 0)
 			{
-				if(blackKingX+1 <=7 && this.gameBoard[blackKingX+1][blackKingY-2].equals("wN"))
-					return true;
-				if(blackKingX-1 >=0 && this.gameBoard[blackKingX-1][blackKingY-2].equals("wN"))
-					return true;
-			}	
-		
+				if(blackKingX+1 <=7 && this.gameBoard[blackKingX+1][blackKingY-2].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY-2]+(8-(blackKingX+1)));
+				}
+				if(blackKingX-1 >=0 && this.gameBoard[blackKingX-1][blackKingY-2].contains("wN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[blackKingY-2]+(8-(blackKingX-1)));
+				}
+			}
+		ATTACK = attackers;
+		if(checked) {
+			return true;
+		}
 		return false;
 	}	
 	
@@ -852,22 +949,23 @@ public class GameBoard {
 		char letterBefore = (char)(letter-1);
 		int number = Integer.parseInt(test.substring(1));
 		
-		String initial = test + " " + letterBefore + number;
+	
 		whiteKingCheck();
-		if(contester == null) {
-			return false;
+//		if(contester == null) {
+		//	return false;
+	//	}
+		if(letterBefore >= 'a'){
+			if(safeMove(test + " " + letterBefore + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterBefore + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterBefore + (number+1), allyTeam, enemyTeam))) 
+				return false;
 		}
-			
-		if(safeMove(test + " " + letterBefore + number, allyTeam, enemyTeam) || safeMove(test + " " + letterBefore + (number-1), allyTeam, enemyTeam) || safeMove(test + " " + letterBefore + (number+1), allyTeam, enemyTeam)) {
+		
+		if( ((number-1 > 0) && safeMove(test + " " + letter + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letter + (number+1), allyTeam, enemyTeam))) {
 			return false;
 		}
 		
-		if(safeMove(test + " " + letter + (number-1), allyTeam, enemyTeam) || safeMove(test + " " + letter + (number+1), allyTeam, enemyTeam)) {
-			return false;
-		}
-		
-		if(safeMove(test + " " + letterAfter + number, allyTeam, enemyTeam) || safeMove(test + " " + letterAfter + (number-1), allyTeam, enemyTeam) || safeMove(test + " " + letterAfter + (number+1), allyTeam, enemyTeam)) {
-			return false;
+		if(letterAfter <= 'h'){			
+			if(safeMove(test + " " + letterAfter + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterAfter + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterAfter + (number+1), allyTeam, enemyTeam))) 
+				return false;
 		}
 		
 		//Is there more than one attacker? If so and king cannot move, checkmate.
@@ -876,18 +974,99 @@ public class GameBoard {
 		{
 			return true;
 		}
+		
+		//Are there no attackers? Could be a stale-mate.
+		if(contester==null || ATTACK == 0) {
+			for(String key : allyTeam.keySet()) {
+				ChessPiece defender = white.get(key);
+				String[] moves = defender.getValidMoves(this.gameBoard);
+				for(String spot: moves) {
+					if( (defender.canMoveTo(spot, this.gameBoard) || defender.canCapture(spot, this.gameBoard)) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
 		//Can the attacker's path be blocked?
 		String[] validMoves = contester.getValidMoves(this.gameBoard);
 		for(String spot : validMoves) {
-			for(String key : white.keySet()) {
-				ChessPiece defender = white.get(key);
+			for(String key : allyTeam.keySet()) {
+				ChessPiece defender = allyTeam.get(key);
 				if(defender.canMoveTo(spot, gameBoard) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam))
 						return false;
 			}
 		}
 		//Can the attacker be captured?
-		for(String key : white.keySet()) {
-			ChessPiece defender = white.get(key);
+		for(String key : allyTeam.keySet()) {
+			ChessPiece defender = allyTeam.get(key);
+			if(defender.canCapture(contester.stringPosition(), this.gameBoard))
+					return false;
+		}
+		return true;
+	}
+
+	public boolean blackNoPossibleMoves() { //W.I.P
+		String test = blackPosition;
+		HashMap<String, ChessPiece> allyTeam = this.black;
+		HashMap<String, ChessPiece> enemyTeam = this.white;
+		//Can the King move out of the way?
+		char letter = test.charAt(0);
+		char letterAfter = (char)(letter+1);
+		char letterBefore = (char)(letter-1);
+		int number = Integer.parseInt(test.substring(1));
+		
+	
+		blackKingCheck();
+//		if(contester == null) {
+		//	return false;
+	//	}
+		if(letterBefore >= 'a'){
+			if(safeMove(test + " " + letterBefore + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterBefore + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterBefore + (number+1), allyTeam, enemyTeam))) 
+				return false;
+		}
+		
+		if( ((number-1 > 0) && safeMove(test + " " + letter + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letter + (number+1), allyTeam, enemyTeam))) {
+			return false;
+		}
+		
+		if(letterAfter <= 'h'){			
+			if(safeMove(test + " " + letterAfter + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterAfter + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterAfter + (number+1), allyTeam, enemyTeam))) 
+				return false;
+		}
+		
+		//Is there more than one attacker? If so and king cannot move, checkmate.
+		
+		if(ATTACK > 1)
+		{
+			return true;
+		}
+		
+		//Are there no attackers? Could be a stale-mate.
+		if(contester==null || ATTACK == 0) {
+			for(String key : allyTeam.keySet()) {
+				ChessPiece defender = black.get(key);
+				String[] moves = defender.getValidMoves(this.gameBoard);
+				for(String spot: moves) {
+					if( (defender.canMoveTo(spot, this.gameBoard) || defender.canCapture(spot, this.gameBoard)) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam)) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		//Can the attacker's path be blocked?
+		String[] validMoves = contester.getValidMoves(this.gameBoard);
+		for(String spot : validMoves) {
+			for(String key : allyTeam.keySet()) {
+				ChessPiece defender = allyTeam.get(key);
+				if(defender.canMoveTo(spot, gameBoard) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam))
+						return false;
+			}
+		}
+		//Can the attacker be captured?
+		for(String key : allyTeam.keySet()) {
+			ChessPiece defender = allyTeam.get(key);
 			if(defender.canCapture(contester.stringPosition(), this.gameBoard))
 					return false;
 		}
@@ -929,7 +1108,7 @@ public class GameBoard {
 
 	private boolean emptySpot(String end) {
 		int[] position = Parser.translate(end);
-		if(this.gameBoard[position[0]][position[1]].isBlank()) {
+		if(this.gameBoard[position[0]][position[1]].isBlank() || this.gameBoard[position[0]][position[1]].contains("##")) {
 			return true;
 		}
 		return false;
