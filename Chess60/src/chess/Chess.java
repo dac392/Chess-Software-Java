@@ -125,11 +125,12 @@ public class Chess {
 					game.resignPrompt(player);
 					break;
 			}
-			if(chessboard.whiteKingCheck()) {
-				System.out.println("THE KING IS UNDER ATTACK!");
-				
+			if(chessboard.whiteKingCheck() && chessboard.whiteNoPossibleMoves()) {
+				chessboard.printGameBoard();
+				System.out.println("Its over!");
+				game.ongoing = false;
 			}
-			System.out.println(chessboard.whiteNoPossibleMoves());
+			
 //			break;
 		}
 		

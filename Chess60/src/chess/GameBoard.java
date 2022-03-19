@@ -13,6 +13,8 @@ public class GameBoard {
 	private int player;
 	int[] whiteKingPosition;
 	int[] blackKingPosition;
+	int ATTACK;
+	ChessPiece contester;
 	String whitePosition;
 	String blackPosition;
 	private static final int BOARD_SIZE = 8;
@@ -247,6 +249,8 @@ public class GameBoard {
 		String end = inputs[1];
 //		System.out.println("allyTeam contains "+initial+" : "+allyTeam.containsKey(initial));
 //		System.out.println(allyTeam.keySet());
+		if(allyTeam.containsKey(initial))
+			return false;
 		if(allyTeam.containsKey(initial)) {
 			ChessPiece p = allyTeam.get(initial);
 //			System.out.println(!this.emptySpot(end)); 
@@ -380,6 +384,11 @@ public class GameBoard {
 	public boolean whiteKingCheck() {
 		int whiteKingX = whiteKingPosition[0];
 		int whiteKingY = whiteKingPosition[1];
+		HashMap<String, ChessPiece> allyTeam = this.white;
+		HashMap<String, ChessPiece> enemyTeam = this.black;
+		int attackers = 0;
+		boolean checked = false;
+		String letters[ ]= {"a", "b", "c", "d", "e", "f", "g", "h\n"};
 		//Rook+Queen+King Check
 			boolean first = true;
 			for(int x = whiteKingX-1; x >= 0; x--) {
@@ -388,10 +397,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("b")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")) {
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[whiteKingY]+x);
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[whiteKingY]+x);
+						break;
+					}
 					else
 						break;
 				}
@@ -405,10 +422,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("b")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[whiteKingY]+x);
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[whiteKingY]+x);
+						break;
+					}
 					else
 						break;
 				}
@@ -422,10 +447,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("b")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+whiteKingX);
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+whiteKingX);
+						break;
+					}
 					else
 						break;
 				}
@@ -439,10 +472,18 @@ public class GameBoard {
 					break;
 				}
 				if(attacker.contains("b")) {
-					if(attacker.contains("R") || attacker.contains("Q"))
-						return true;
-					else if(first && attacker.contains("K"))
-						return true;
+					if(attacker.contains("R") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+whiteKingX);
+						break;
+					}
+					else if(first && attacker.contains("K")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[x]+whiteKingX);
+						break;
+					}
 					else
 						break;
 				}
@@ -451,17 +492,29 @@ public class GameBoard {
 			
 		//Pawn+King Check
 			if((whiteKingX-1 >= 0)) {
-				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bp") ||this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bK"))) 
-					return true;
-				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bK")))
-					return true;
+				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bp") ||this.gameBoard[whiteKingX-1][whiteKingY-1].equals("bK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX-1));
+				}
+				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].equals("bK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX-1));
+				}
 			}
 			
 			if((whiteKingX+1 <= 7)) {
-				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bK"))) 
-					return true;
-				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bK")))
-					return true;
+				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY-1].equals("bK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX+1));
+				}
+				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].equals("bK"))){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX+1));
+				}
 			}
 		
 		//Bishop+Queen Check
@@ -472,8 +525,12 @@ public class GameBoard {
 				if(attacker.contains("w")) 
 					break;
 				if(attacker.contains("b")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -488,8 +545,12 @@ public class GameBoard {
 				if(attacker.contains("w")) 
 					break;
 				if(attacker.contains("b")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -504,8 +565,12 @@ public class GameBoard {
 				if(attacker.contains("w")) 
 					break;
 				if(attacker.contains("b")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -520,8 +585,12 @@ public class GameBoard {
 				if(attacker.contains("w")) 
 					break;
 				if(attacker.contains("b")) {
-					if(attacker.contains("B") || attacker.contains("Q"))
-						return true;
+					if(attacker.contains("B") || attacker.contains("Q")){
+						attackers++;
+						checked = true;
+						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						break;
+					}
 					else
 						break;
 				}
@@ -531,32 +600,60 @@ public class GameBoard {
 		//Knight Check
 			if(whiteKingX+2 <= 7)
 			{
-				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX+2][whiteKingY+1].equals("bN"))
-					return true;
-				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX+2][whiteKingY-1].equals("bN"))
-					return true;
+				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX+2][whiteKingY+1].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX+2));
+				}
+				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX+2][whiteKingY-1].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX+2));
+				}
 			}
 			if(whiteKingX-2 >= 0)
 			{
-				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX-2][whiteKingY+1].equals("bN"))
-					return true;
-				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX-2][whiteKingY-1].equals("bN"))
-					return true;
+				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX-2][whiteKingY+1].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX-2));
+				}
+				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX-2][whiteKingY-1].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX-2));
+				}
 			}
 			if(whiteKingY+2 <= 7)
 			{
-				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY+2].equals("bN"))
-					return true;
-				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY+2].equals("bN"))
-					return true;
+				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY+2].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY+2]+(whiteKingX+1));
+				}
+				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY+2].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY+2]+(whiteKingX-1));
+				}
 			}	
 			if(whiteKingY-2 >= 0)
 			{
-				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY-2].equals("bN"))
-					return true;
-				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY-2].equals("bN"))
-					return true;
-			}		
+				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY-2].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY-2]+(whiteKingX+1));
+				}
+				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY-2].equals("bN")){
+					attackers++;
+					checked = true;
+					contester = enemyTeam.get(letters[whiteKingY-2]+(whiteKingX-1));
+				}
+			}
+		ATTACK = attackers;
+		if(checked) {
+			return true;
+		}
 		return false;
 	}
 	
@@ -739,7 +836,8 @@ public class GameBoard {
 					return true;
 				if(blackKingX-1 >=0 && this.gameBoard[blackKingX-1][blackKingY-2].equals("wN"))
 					return true;
-			}		
+			}	
+		
 		return false;
 	}	
 	
@@ -754,7 +852,11 @@ public class GameBoard {
 		int number = Integer.parseInt(test.substring(1));
 		
 		String initial = test + " " + letterBefore + number;
-		
+		whiteKingCheck();
+		if(contester == null) {
+			return false;
+		}
+			
 		if(safeMove(test + " " + letterBefore + number, allyTeam, enemyTeam) || safeMove(test + " " + letterBefore + (number-1), allyTeam, enemyTeam) || safeMove(test + " " + letterBefore + (number+1), allyTeam, enemyTeam)) {
 			return false;
 		}
@@ -769,9 +871,25 @@ public class GameBoard {
 		
 		//Is there more than one attacker? If so and king cannot move, checkmate.
 		
+		if(ATTACK > 1)
+		{
+			return true;
+		}
 		//Can the attacker's path be blocked?
-		
+		String[] validMoves = contester.getValidMoves(this.gameBoard);
+		for(String spot : validMoves) {
+			for(String key : white.keySet()) {
+				ChessPiece defender = white.get(key);
+				if(defender.canMoveTo(spot, gameBoard) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam))
+						return false;
+			}
+		}
 		//Can the attacker be captured?
+		for(String key : white.keySet()) {
+			ChessPiece defender = white.get(key);
+			if(defender.canCapture(contester.stringPosition(), this.gameBoard))
+					return false;
+		}
 		return true;
 	}
 	private void move(ChessPiece p, String source, String target, String[] inputs, HashMap<String, ChessPiece> allyTeam) {
