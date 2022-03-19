@@ -400,13 +400,13 @@ public class GameBoard {
 					if(attacker.contains("R") || attacker.contains("Q")) {
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[whiteKingY]+x);
+						contester = enemyTeam.get(letters[whiteKingY]+(8-x));
 						break;
 					}
 					else if(first && attacker.contains("K")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[whiteKingY]+x);
+						contester = enemyTeam.get(letters[whiteKingY]+(8-x));
 						break;
 					}
 					else
@@ -425,13 +425,13 @@ public class GameBoard {
 					if(attacker.contains("R") || attacker.contains("Q")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[whiteKingY]+x);
+						contester = enemyTeam.get(letters[whiteKingY]+(8-x));
 						break;
 					}
 					else if(first && attacker.contains("K")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[whiteKingY]+x);
+						contester = enemyTeam.get(letters[whiteKingY]+(8-x));
 						break;
 					}
 					else
@@ -450,13 +450,13 @@ public class GameBoard {
 					if(attacker.contains("R") || attacker.contains("Q")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[x]+whiteKingX);
+						contester = enemyTeam.get(letters[x]+(8-whiteKingX));
 						break;
 					}
 					else if(first && attacker.contains("K")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[x]+whiteKingX);
+						contester = enemyTeam.get(letters[x]+(8-whiteKingX));
 						break;
 					}
 					else
@@ -475,13 +475,13 @@ public class GameBoard {
 					if(attacker.contains("R") || attacker.contains("Q")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[x]+whiteKingX);
+						contester = enemyTeam.get(letters[x]+(8-whiteKingX));
 						break;
 					}
 					else if(first && attacker.contains("K")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[x]+whiteKingX);
+						contester = enemyTeam.get(letters[x]+(8-whiteKingX));
 						break;
 					}
 					else
@@ -495,12 +495,12 @@ public class GameBoard {
 				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX-1][whiteKingY-1].contains("bp") ||this.gameBoard[whiteKingX-1][whiteKingY-1].contains("bK"))){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX-1));
+					contester = enemyTeam.get(letters[whiteKingY-1]+(8-(whiteKingX-1)));
 				}
 				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bK"))){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX-1));
+					contester = enemyTeam.get(letters[whiteKingY+1]+(8-(whiteKingX-1)));
 				}
 			}
 			
@@ -508,12 +508,12 @@ public class GameBoard {
 				if(whiteKingY - 1 >= 0 && (this.gameBoard[whiteKingX+1][whiteKingY-1].contains("bp") || this.gameBoard[whiteKingX+1][whiteKingY-1].contains("bK"))){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX+1));
+					contester = enemyTeam.get(letters[whiteKingY-1]+(8-(whiteKingX+1)));
 				}
 				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bK"))){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX+1));
+					contester = enemyTeam.get(letters[whiteKingY+1]+(8-(whiteKingX+1)));
 				}
 			}
 		
@@ -528,7 +528,7 @@ public class GameBoard {
 					if(attacker.contains("B") || attacker.contains("Q")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
 						break;
 					}
 					else
@@ -548,7 +548,7 @@ public class GameBoard {
 					if(attacker.contains("B") || attacker.contains("Q")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
 						break;
 					}
 					else
@@ -568,7 +568,7 @@ public class GameBoard {
 					if(attacker.contains("B") || attacker.contains("Q")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
 						break;
 					}
 					else
@@ -588,7 +588,7 @@ public class GameBoard {
 					if(attacker.contains("B") || attacker.contains("Q")){
 						attackers++;
 						checked = true;
-						contester = enemyTeam.get(letters[diagonalY]+(diagonalX));
+						contester = enemyTeam.get(letters[diagonalY]+(8-diagonalX));
 						break;
 					}
 					else
@@ -603,12 +603,12 @@ public class GameBoard {
 				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX+2][whiteKingY+1].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX+2));
+					contester = enemyTeam.get(letters[whiteKingY+1]+(8-(whiteKingX+2)));
 				}
 				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX+2][whiteKingY-1].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX+2));
+					contester = enemyTeam.get(letters[whiteKingY-1]+(8-(whiteKingX+2)));
 				}
 			}
 			if(whiteKingX-2 >= 0)
@@ -616,13 +616,13 @@ public class GameBoard {
 				if(whiteKingY+1 <=7 && this.gameBoard[whiteKingX-2][whiteKingY+1].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY+1]+(whiteKingX-2));
+					contester = enemyTeam.get(letters[whiteKingY+1]+(8-(whiteKingX-2)));
 				}
 	
 				if(whiteKingY-1 >=0 && this.gameBoard[whiteKingX-2][whiteKingY-1].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY-1]+(whiteKingX-2));
+					contester = enemyTeam.get(letters[whiteKingY-1]+(8-(whiteKingX-2)));
 				}
 			}
 			if(whiteKingY+2 <= 7)
@@ -630,12 +630,12 @@ public class GameBoard {
 				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY+2].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY+2]+(whiteKingX+1));
+					contester = enemyTeam.get(letters[whiteKingY+2]+(8-(whiteKingX+1)));
 				}
 				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY+2].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY+2]+(whiteKingX-1));
+					contester = enemyTeam.get(letters[whiteKingY+2]+(8-(whiteKingX-1)));
 				}
 			}	
 			if(whiteKingY-2 >= 0)
@@ -643,12 +643,12 @@ public class GameBoard {
 				if(whiteKingX+1 <=7 && this.gameBoard[whiteKingX+1][whiteKingY-2].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY-2]+(whiteKingX+1));
+					contester = enemyTeam.get(letters[whiteKingY-2]+(8-(whiteKingX+1)));
 				}
 				if(whiteKingX-1 >=0 && this.gameBoard[whiteKingX-1][whiteKingY-2].contains("bN")){
 					attackers++;
 					checked = true;
-					contester = enemyTeam.get(letters[whiteKingY-2]+(whiteKingX-1));
+					contester = enemyTeam.get(letters[whiteKingY-2]+(8-(whiteKingX-1)));
 				}
 			}
 		ATTACK = attackers;
