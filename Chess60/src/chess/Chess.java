@@ -125,16 +125,25 @@ public class Chess {
 					game.resignPrompt(player);
 					break;
 			}
+			
+			
+			
 			if(chessboard.whiteKingCheck() && chessboard.whiteNoPossibleMoves()) {
 				chessboard.printGameBoard();
 				System.out.println("Its over!");
 				game.ongoing = false;
 			}
-			if(chessboard.blackKingCheck() && chessboard.blackNoPossibleMoves()) {
+			else if(chessboard.blackKingCheck() && chessboard.blackNoPossibleMoves()) {
 				chessboard.printGameBoard();
 				System.out.println("Its over!");
 				game.ongoing = false;
 			}			
+			
+			else if((player == PLAYER_2 && chessboard.whiteNoPossibleMoves())||(player == PLAYER_1 && chessboard.blackNoPossibleMoves())) {
+				chessboard.printGameBoard();
+				System.out.println("Stalemate!");
+				game.ongoing = false;
+			}
 //			break;
 		}
 		

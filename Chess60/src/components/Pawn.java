@@ -5,7 +5,8 @@ import util.Parser;
 public class Pawn extends ChessPiece{
 	public int[] hCapture;
 	public int[] vCapture;
-	
+	public boolean firstMoveDone = false;
+	String test;
 	private static final int MOVES = 2;
 	private static final int MAX_INPUTS = 3;
 	
@@ -38,6 +39,7 @@ public class Pawn extends ChessPiece{
 	public boolean canCapture(String target, String[][] board) {
 
 		int captureMoves = 2;
+		test = board[x][y];
 		for(int i = 0; i < captureMoves; i++) {
 			int tempX = this.x + hCapture[i];
 			int tempY = this.y + vCapture[i];
@@ -78,7 +80,7 @@ public class Pawn extends ChessPiece{
 	public char wasMoved(String[] input) {
 		super.totalMoves = 1;
 		boolean canPromote = false;
-		boolean defaultPromotion = input.length < MAX_INPUTS;
+		boolean defaultPromotion = input.length < MAX_INPUTS;		
 		if(this.playerColor == Parser.PLAYER_1) {
 			canPromote = Parser.canPromoteWhite(this.getPosition());
 		}else if(this.playerColor == Parser.PLAYER_2) {
@@ -92,4 +94,9 @@ public class Pawn extends ChessPiece{
 		
 		return Parser.INVALID_CHAR;
 	}
+	public void revert() {
+		if(!firstMoveDone)
+			super.totalMoves = 2;
+	}
+
 }
