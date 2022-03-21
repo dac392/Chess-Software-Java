@@ -6,6 +6,7 @@ public class Pawn extends ChessPiece{
 	public int[] hCapture;
 	public int[] vCapture;
 	public boolean firstMoveDone = false;
+	public boolean passantable = true;
 	String test;
 	private static final int MOVES = 2;
 	private static final int MAX_INPUTS = 3;
@@ -97,6 +98,12 @@ public class Pawn extends ChessPiece{
 	public void revert() {
 		if(!firstMoveDone)
 			super.totalMoves = 2;
+	}
+	
+	public void passantPassed() {
+		if(firstMoveDone) {
+			passantable = false;
+		}
 	}
 
 }

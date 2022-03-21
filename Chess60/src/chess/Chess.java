@@ -42,6 +42,10 @@ public class Chess {
 		if (this.previousMoveWasValid){
 			this.getBoard();
 		}
+		if(player == PLAYER_1 && chessboard.whiteKingCheck())
+			System.out.println("CHECK!");
+		if(player == PLAYER_2 && chessboard.blackKingCheck())
+			System.out.println("CHECK!");
 		System.out.print(playerPrompt);
 		this.previousMoveWasValid = true;
 	}

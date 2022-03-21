@@ -132,6 +132,7 @@ public class GameBoard {
 		String end = inputs[1];
 //		System.out.println("allyTeam contains "+initial+" : "+allyTeam.containsKey(initial));
 //		System.out.println(allyTeam.keySet());
+		String letters[ ]= {"a", "b", "c", "d", "e", "f", "g", "h"};
 		boolean isItPawn = false;
 		ChessPiece originalPawn = null;
 		
@@ -358,6 +359,129 @@ public class GameBoard {
 					number = -1;
 				originalPawn = new ChessPiece(p.getPosition()[0], p.getPosition()[1], p.getName().charAt(1),number, p.getTotalMoves()); 
 			}
+			
+			//PASSANT
+			if(p instanceof Pawn) {
+				if(player == PLAYER_1 && initial.contains("5")) {
+					int[] start = Parser.translate(initial);
+					int[] location = Parser.translate(end);
+					
+					if(location[0] == (start[0]-1) && (location[1] == (start[1]-1) || location[1] == (start[1]+1)) ) {
+						if((start[1] -1 ) >= 0) {
+							String condition = letters[start[1]-1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.player *=-1;
+										return true;
+										
+									}
+								}
+							}
+						}
+						if((start[1] +1 ) <= 7) {
+							String condition = letters[start[1]+1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.player *=-1;
+										return true;
+										
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				if(player == PLAYER_2 && initial.contains("4")) {
+					int[] start = Parser.translate(initial);
+					int[] location = Parser.translate(end);
+					
+					if(location[0] == (start[0]+1) && (location[1] == (start[1]-1) || location[1] == (start[1]+1)) ) {
+						if((start[1] -1 ) >= 0) {
+							String condition = letters[start[1]-1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.player *=-1;
+										return true;
+										
+									}
+								}
+							}
+						}
+						if((start[1] +1 ) <= 7) {
+							String condition = letters[start[1]+1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.player *=-1;
+										return true;
+										
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 //			System.out.println(!this.emptySpot(end)); 
 //			System.out.println(enemyTeam.containsKey(end));
 			if(!this.emptySpot(end) && enemyTeam.containsKey(end)) {
@@ -486,6 +610,11 @@ public class GameBoard {
 						((King)p).moved();
 					if(p instanceof Rook)
 						((Rook)p).moved();
+					for(String key : enemyTeam.keySet()) {
+						ChessPiece update = enemyTeam.get(key);
+						if(update instanceof Pawn)
+							((Pawn)update).passantPassed();
+					}
 					return true;
 				}
 			}
@@ -504,6 +633,7 @@ public class GameBoard {
 		HashMap<String, ChessPiece> enemyTeam = new HashMap<>();
 		enemyTeam.putAll(safe);
 		boolean isItPawn = false;
+		String letters[ ]= {"a", "b", "c", "d", "e", "f", "g", "h"};
 		ChessPiece originalPawn = null;
 //		System.out.println("allyTeam contains "+initial+" : "+allyTeam.containsKey(initial));
 //		System.out.println(allyTeam.keySet());
@@ -519,6 +649,143 @@ public class GameBoard {
 					number = -1;
 				originalPawn = new ChessPiece(p.getPosition()[0], p.getPosition()[1], p.getName().charAt(1),number, p.getTotalMoves()); 
 			}
+			if(p instanceof Pawn) {
+				if(player == PLAYER_1 && initial.contains("5")) {
+					int[] start = Parser.translate(initial);
+					int[] location = Parser.translate(end);
+					
+					if(location[0] == (start[0]-1) && (location[1] == (start[1]-1) || location[1] == (start[1]+1)) ) {
+						if((start[1] -1 ) >= 0) {
+							String condition = letters[start[1]-1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.move(p,end, initial, inputs, allyTeam);
+										enemyTeam.put(condition, r);
+										this.gameBoard[dest[0]][dest[1]] = r.toString();
+										if(isItPawn && originalPawn != null) {
+											allyTeam.replace(initial, originalPawn);
+										}
+										
+									}
+								}
+							}
+						}
+						if((start[1] +1 ) <= 7) {
+							String condition = letters[start[1]+1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.move(p,end, initial, inputs, allyTeam);
+										enemyTeam.put(condition, r);
+										this.gameBoard[dest[0]][dest[1]] = r.toString();
+										if(isItPawn && originalPawn != null) {
+											allyTeam.replace(initial, originalPawn);
+										}
+										
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				if(player == PLAYER_2 && initial.contains("4")) {
+					int[] start = Parser.translate(initial);
+					int[] location = Parser.translate(end);
+					
+					if(location[0] == (start[0]+1) && (location[1] == (start[1]-1) || location[1] == (start[1]+1)) ) {
+						if((start[1] -1 ) >= 0) {
+							String condition = letters[start[1]-1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.move(p,end, initial, inputs, allyTeam);
+										enemyTeam.put(condition, r);
+										this.gameBoard[dest[0]][dest[1]] = r.toString();
+										if(isItPawn && originalPawn != null) {
+											allyTeam.replace(initial, originalPawn);
+										}
+										
+									}
+								}
+							}
+						}
+						if((start[1] +1 ) <= 7) {
+							String condition = letters[start[1]+1] +(8- (start[0]));
+							if(enemyTeam.containsKey(condition)) {
+								ChessPiece r = enemyTeam.get(condition);
+								if(r instanceof Pawn) {
+									if(((Pawn)r).firstMoveDone &&((Pawn)r).passantable && this.emptySpot(end)) {
+										this.move(p,initial, end, inputs, allyTeam);
+										int[] dest= r.getPosition();
+										this.gameBoard[dest[0]][dest[1]] = "";
+										enemyTeam.remove(condition);
+										if(whiteKingCheck()) {
+											this.move(p,end, initial, inputs, allyTeam);
+											enemyTeam.put(condition, r);
+											this.gameBoard[dest[0]][dest[1]] = r.toString();
+											if(isItPawn && originalPawn != null) {
+												allyTeam.replace(initial, originalPawn);
+											}
+											return false;
+										}
+										this.move(p,end, initial, inputs, allyTeam);
+										enemyTeam.put(condition, r);
+										this.gameBoard[dest[0]][dest[1]] = r.toString();
+										if(isItPawn && originalPawn != null) {
+											allyTeam.replace(initial, originalPawn);
+										}
+										
+									}
+								}
+							}
+						}
+					}
+				}
+			}			
 //			System.out.println(!this.emptySpot(end)); 
 			if(!this.emptySpot(end) && enemyTeam.containsKey(end)) {
 				if(p.canCapture(end, this.gameBoard)) {
@@ -1067,7 +1334,7 @@ public class GameBoard {
 					checked = true;
 					contester = enemyTeam.get(letters[blackKingY-1]+(8-(blackKingX-1)));
 				}
-				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX-1][blackKingY+1].contains("wp") || this.gameBoard[blackKingX-1][blackKingY+1].contains("wK"))){
+				if(blackKingY + 1 <= 7 && (this.gameBoard[blackKingX-1][blackKingY+1].contains("wp") || this.gameBoard[blackKingX-1][blackKingY+1].contains("wK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[blackKingY+1]+(8-(blackKingX-1)));
@@ -1080,7 +1347,7 @@ public class GameBoard {
 					checked = true;
 					contester = enemyTeam.get(letters[blackKingY-1]+(8-(blackKingX+1)));
 				}
-				if(blackKingY + 1 >= 7 && (this.gameBoard[blackKingX+1][blackKingY+1].contains("wp") || this.gameBoard[blackKingX+1][blackKingY+1].contains("wK"))){
+				if(blackKingY + 1 <= 7 && (this.gameBoard[blackKingX+1][blackKingY+1].contains("wp") || this.gameBoard[blackKingX+1][blackKingY+1].contains("wK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[blackKingY+1]+(8-(blackKingX+1)));
@@ -1292,6 +1559,16 @@ public class GameBoard {
 			if(defender.canCapture(contester.stringPosition(), this.gameBoard) && safeMove(defender.stringPosition()+" "+contester.stringPosition(), allyTeam, enemyTeam)) {
 				return false;
 			}
+			if(contester instanceof Pawn && defender instanceof Pawn && contester.getPosition()[0]-1 >=0 ) { //Passantable?
+				char a = contester.stringPosition().charAt(0);
+				a = a--;
+				if( a >= 'a' && safeMove(defender.stringPosition()+" "+a+contester.stringPosition().charAt(1), allyTeam, enemyTeam))
+					return false;
+				a = (char)(a+2);
+				
+				if( a <= 'h' && safeMove(defender.stringPosition()+" "+a+contester.stringPosition().charAt(1), allyTeam, enemyTeam))
+					return false;
+			}
 					
 		}
 		return true;
@@ -1338,7 +1615,6 @@ public class GameBoard {
 				String[] moves = defender.getValidMoves(this.gameBoard);
 				for(String spot: moves) {
 					if( (defender.canMoveTo(spot, this.gameBoard) || defender.canCapture(spot, this.gameBoard)) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam)) {
-						System.out.println(defender.stringPosition()+" "+spot);
 						return false;
 					}
 				}
@@ -1361,6 +1637,17 @@ public class GameBoard {
 			if(defender.canCapture(contester.stringPosition(), this.gameBoard) && safeMove(defender.stringPosition()+" "+contester.stringPosition(), allyTeam, enemyTeam)) {
 					return false;
 			}
+			if(contester instanceof Pawn && defender instanceof Pawn && contester.getPosition()[0]-1 >=0 ) { //Passantable?
+				char a = contester.stringPosition().charAt(0);
+				a = a--;
+				if( a >= 'a' && safeMove(defender.stringPosition()+" "+a+contester.stringPosition().charAt(1), allyTeam, enemyTeam))
+					return false;
+				a = (char)(a+2);
+				
+				if( a <= 'h' && safeMove(defender.stringPosition()+" "+a+contester.stringPosition().charAt(1), allyTeam, enemyTeam))
+					return false;
+			}
+					
 		}
 		return true;
 	}
