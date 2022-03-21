@@ -14,6 +14,7 @@ public class Chess {
 	boolean previousMoveWasValid;
 	boolean whiteCheck;
 	boolean blackCheck;
+	public static boolean alreadytold=false;
 	private static boolean  drawCalled = false;
 	private static final int PLAYER_1 = 1;
 	private static final int PLAYER_2 = -1;
@@ -42,10 +43,14 @@ public class Chess {
 		if (this.previousMoveWasValid){
 			this.getBoard();
 		}
-		if(player == PLAYER_1 && chessboard.whiteKingCheck())
+		if(player == PLAYER_1 && chessboard.whiteKingCheck() && !alreadytold) { 
 			System.out.println("CHECK!");
-		if(player == PLAYER_2 && chessboard.blackKingCheck())
+			alreadytold = true;
+		}
+		if(player == PLAYER_2 && chessboard.blackKingCheck() && !alreadytold) {
 			System.out.println("CHECK!");
+			alreadytold = true;
+		}
 		System.out.print(playerPrompt);
 		this.previousMoveWasValid = true;
 	}
@@ -117,6 +122,8 @@ public class Chess {
 				case DRAW:	//have not implemented yet
 					if(!drawCalled) {
 						game.previousMoveWasValid = game.makeMove(input, player);
+						if(!game.previousMoveWasValid)
+							break;
 						drawCalled = true;
 					}
 						
@@ -127,6 +134,7 @@ public class Chess {
 					break;
 				case RESIGN:					
 					game.resignPrompt(player);
+					game.ongoing = false;
 					break;
 			}
 			
@@ -159,15 +167,17 @@ public class Chess {
 		}else {
 			status = this.chessboard.blackMoveManager(input);
 		}
-		if(status == CORRECT)
+		if(status == CORRECT) {
+			alreadytold = false;
 			return true;
-		
+		}
 		System.out.println("Illegal move, try again");
 		return false;
 	}
 	private void resignPrompt(int player) {
 		String p = (player == PLAYER_1)? "black":"white";
 		System.out.println(p+" wins");
+		
 	}
 
 
