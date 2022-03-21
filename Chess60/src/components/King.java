@@ -7,7 +7,7 @@ public class King extends ChessPiece{
 	// v_moves
 	// name
 	private final static int MOVES = 8;
-	
+	public boolean hasntMoved = true;
 	public King(int x,int y, char type, int player) {
 		super(x,y, type, player, MOVES);
 		super.hmoves = new int[]{-1,-1,0,1,1, 1,0, -1};	// up,right,down,left
@@ -29,5 +29,8 @@ public class King extends ChessPiece{
 //		Parser.printArray(test.getValidMoves());
 	}
 	
+	public void moved() {
+		hasntMoved = false;
+	}
 
 }

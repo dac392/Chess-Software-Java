@@ -134,10 +134,221 @@ public class GameBoard {
 //		System.out.println(allyTeam.keySet());
 		boolean isItPawn = false;
 		ChessPiece originalPawn = null;
+		
+		
+		
 		if(allyTeam.containsKey(initial)) {
 			
 			ChessPiece p = allyTeam.get(initial);
-			
+			//CASTLING
+			if( p instanceof King && ((King)p).hasntMoved){
+				if(player == PLAYER_1 && (end.contains("c1")|| end.contains("g1"))) {
+					if(allyTeam.containsKey("a1")) {
+						
+						ChessPiece r = allyTeam.get("a1");
+						
+						if(r instanceof Rook && ((Rook)r).hasntMoved) {
+							
+							if(end.contains("c1") && this.emptySpot("b1") && this.emptySpot("c1") && this.emptySpot("d1") && !whiteKingCheck()) {
+								String in2 = "a1 d1";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "a1", "d1", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "d1", "a1", inputs2, allyTeam);
+									return false;
+								}
+								((King)p).moved();
+								((Rook)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}
+					
+					if(allyTeam.containsKey("h1")) {
+						
+						ChessPiece r = allyTeam.get("h1");
+						
+						if(r instanceof Rook && ((Rook)r).hasntMoved) {
+							
+							if(end.contains("g1") && this.emptySpot("f1") && this.emptySpot("g1") &&  !whiteKingCheck()) {
+								String in2 = "h1 f1";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "h1", "f1", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "f1", "h1", inputs2, allyTeam);
+									return false;
+								}
+								((King)p).moved();
+								((Rook)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}					
+				}
+				if(player == PLAYER_2 && (end.contains("c8")|| end.contains("g8"))) {
+					if(allyTeam.containsKey("a8")) {
+						
+						ChessPiece r = allyTeam.get("a8");
+						
+						if(r instanceof Rook && ((Rook)r).hasntMoved) {
+							
+							if(end.contains("c8") && this.emptySpot("b8") && this.emptySpot("c8") && this.emptySpot("d8") && !whiteKingCheck()) {
+								String in2 = "a8 d8";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "a8", "d8", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "d8", "a8", inputs2, allyTeam);
+									return false;
+								}
+								((King)p).moved();
+								((Rook)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}
+					
+					if(allyTeam.containsKey("h8")) {
+						
+						ChessPiece r = allyTeam.get("h8");
+						
+						if(r instanceof Rook && ((Rook)r).hasntMoved) {
+							
+							if(end.contains("g8") && this.emptySpot("f8") && this.emptySpot("g8") &&  !whiteKingCheck()) {
+								String in2 = "h8 f8";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "h8", "f8", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "f1", "h1", inputs2, allyTeam);
+									return false;
+								}
+								((King)p).moved();
+								((Rook)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}					
+				}				
+			}
+			if( p instanceof Rook && ((Rook)p).hasntMoved){
+				if(player == PLAYER_1 && (end.contains("d1")|| end.contains("f1"))) {
+					if(allyTeam.containsKey("e1")) {
+						
+						ChessPiece r = allyTeam.get("e1");
+						
+						if(r instanceof King && ((King)r).hasntMoved) {
+							
+							if(initial.contains("a1") && end.contains("d1") && this.emptySpot("b1") && this.emptySpot("c1") && this.emptySpot("d1") && !whiteKingCheck()) {
+								String in2 = "e1 c1";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "e1", "c1", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "c1", "e1", inputs2, allyTeam);
+									return false;
+								}
+								((Rook)p).moved();
+								((King)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}
+					
+					if(allyTeam.containsKey("e1")) {
+						
+						ChessPiece r = allyTeam.get("e1");
+						
+						if(r instanceof King && ((King)r).hasntMoved) {
+							
+							if(initial.contains("h1") && end.contains("f1") && this.emptySpot("f1") && this.emptySpot("g1") &&  !whiteKingCheck()) {
+								String in2 = "e1 g1";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "e1", "g1", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "g1", "e1", inputs2, allyTeam);
+									return false;
+								}
+								((Rook)p).moved();
+								((King)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}					
+				}
+				if(player == PLAYER_2 && (end.contains("d8")|| end.contains("f8"))) {
+					if(allyTeam.containsKey("e8")) {
+						
+						ChessPiece r = allyTeam.get("e8");
+						
+						if(r instanceof King && ((King)r).hasntMoved) {
+							
+							if(initial.contains("a8") && end.contains("d8") && this.emptySpot("b8") && this.emptySpot("c8") && this.emptySpot("d8") && !whiteKingCheck()) {
+								String in2 = "e8 c8";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "e8", "c8", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "c8", "e8", inputs2, allyTeam);
+									return false;
+								}
+								((Rook)p).moved();
+								((King)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}
+					
+					if(allyTeam.containsKey("e8")) {
+						
+						ChessPiece r = allyTeam.get("e8");
+						
+						if(r instanceof King && ((King)r).hasntMoved) {
+							
+							if(initial.contains("h8") && end.contains("f8") && this.emptySpot("f8") && this.emptySpot("g8") &&  !whiteKingCheck()) {
+								String in2 = "e8 g8";
+								String[] inputs2 = in2.split(" ");
+								this.move(p, initial, end, inputs, allyTeam);
+								this.move(r, "e8", "g8", inputs2, allyTeam);
+								
+								if(whiteKingCheck()) {
+									this.move(p, end, initial, inputs, allyTeam);
+									this.move(r, "g8", "e8", inputs2, allyTeam);
+									return false;
+								}
+								((Rook)p).moved();
+								((King)r).moved();
+								this.player*=-1;
+								return true;
+							}
+						}
+					}					
+				}
+			}					
 			if(p.getName().contains("wp") || p.getName().contains("bp")) {
 				((Pawn) p).revert();
 				
@@ -210,6 +421,10 @@ public class GameBoard {
 					this.player*=-1;
 					if(p instanceof Pawn)
 						((Pawn)allyTeam.get(end)).firstMoveDone = true;
+					if(p instanceof King)
+						((King)p).moved();
+					if(p instanceof Rook)
+						((Rook)p).moved();
 					return true;
 				}
 			}else if(this.emptySpot(end)) {
@@ -267,6 +482,10 @@ public class GameBoard {
 					this.player*=-1;
 					if(p instanceof Pawn)
 						((Pawn)allyTeam.get(end)).firstMoveDone = true;
+					if(p instanceof King)
+						((King)p).moved();
+					if(p instanceof Rook)
+						((Rook)p).moved();
 					return true;
 				}
 			}
@@ -571,7 +790,7 @@ public class GameBoard {
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-1]+(8-(whiteKingX-1)));
 				}
-				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bK"))){
+				if(whiteKingY + 1 <= 7 && (this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX-1][whiteKingY+1].contains("bK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+1]+(8-(whiteKingX-1)));
@@ -584,7 +803,7 @@ public class GameBoard {
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY-1]+(8-(whiteKingX+1)));
 				}
-				if(whiteKingY + 1 >= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bK"))){
+				if(whiteKingY + 1 <= 7 && (this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bp") || this.gameBoard[whiteKingX+1][whiteKingY+1].contains("bK"))){
 					attackers++;
 					checked = true;
 					contester = enemyTeam.get(letters[whiteKingY+1]+(8-(whiteKingX+1)));

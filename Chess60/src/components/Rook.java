@@ -4,6 +4,7 @@ public class Rook extends ChessPiece{
 	private static final int MOVES = 4;
 	private static final int SCALAR = 8;
 	private static final int MAX_MOVES = 14;
+	public boolean hasntMoved = true;
 	
 	public Rook(int x,int y, char type, int player) {
 		super(x,y, type, player, MOVES);
@@ -27,5 +28,8 @@ public class Rook extends ChessPiece{
 		System.out.println("Rook");
 		System.out.println(test.stringPosition());
 //		Parser.printArray(test.getValidMoves());
+	}
+	public void moved() {
+		hasntMoved = false;
 	}
 }
