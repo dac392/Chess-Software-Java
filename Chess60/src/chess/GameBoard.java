@@ -164,6 +164,16 @@ public class GameBoard {
 								((King)p).moved();
 								((Rook)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
@@ -189,6 +199,16 @@ public class GameBoard {
 								((King)p).moved();
 								((Rook)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
@@ -215,6 +235,16 @@ public class GameBoard {
 								((King)p).moved();
 								((Rook)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
@@ -240,6 +270,16 @@ public class GameBoard {
 								((King)p).moved();
 								((Rook)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
@@ -268,6 +308,16 @@ public class GameBoard {
 								((Rook)p).moved();
 								((King)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
@@ -293,6 +343,16 @@ public class GameBoard {
 								((Rook)p).moved();
 								((King)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
@@ -319,6 +379,16 @@ public class GameBoard {
 								((Rook)p).moved();
 								((King)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
@@ -344,6 +414,16 @@ public class GameBoard {
 								((Rook)p).moved();
 								((King)r).moved();
 								this.player*=-1;
+								if(p.name.equals("bK"))
+								{
+									blackKingPosition = p.getPosition();
+									blackPosition = p.stringPosition();
+								}
+								if(p.name.equals("wK"))
+								{
+									whiteKingPosition = p.getPosition();
+									whitePosition = p.stringPosition();
+								}
 								return true;
 							}
 						}
