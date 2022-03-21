@@ -25,7 +25,7 @@ public class Pawn extends ChessPiece{
 			int tempY = this.y + this.vmoves[i];
 			if( (tempX > -1 && tempX < BOARD_SIZE) && (tempY > -1 && tempY < BOARD_SIZE) ) {
 				String spot = board[tempX][tempY];
-				if(!spot.isBlank() && spot.contains(this.ally)) {
+				if(!spot.isBlank() && (spot.contains(this.ally)|| spot.contains(this.enemy))) {
 					break;
 				}
 				String posible_move = Parser.translate(tempX,tempY);

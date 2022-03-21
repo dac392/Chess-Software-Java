@@ -130,12 +130,12 @@ public class Chess {
 			
 			if(chessboard.whiteKingCheck() && chessboard.whiteNoPossibleMoves()) {
 				chessboard.printGameBoard();
-				System.out.println("Its over!");
+				System.out.println("Checkmate! Black Wins!");
 				game.ongoing = false;
 			}
 			else if(chessboard.blackKingCheck() && chessboard.blackNoPossibleMoves()) {
 				chessboard.printGameBoard();
-				System.out.println("Its over!");
+				System.out.println("Checkmate! White wins!");
 				game.ongoing = false;
 			}			
 			

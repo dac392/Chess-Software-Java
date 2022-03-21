@@ -301,7 +301,6 @@ public class GameBoard {
 				originalPawn = new ChessPiece(p.getPosition()[0], p.getPosition()[1], p.getName().charAt(1),number, p.getTotalMoves()); 
 			}
 //			System.out.println(!this.emptySpot(end)); 
-//			System.out.println(enemyTeam.containsKey(end));
 			if(!this.emptySpot(end) && enemyTeam.containsKey(end)) {
 				if(p.canCapture(end, this.gameBoard)) {
 					this.move(p,initial, end, inputs, allyTeam);
@@ -378,10 +377,10 @@ public class GameBoard {
 						whiteKingPosition = p.getPosition();
 						whitePosition = p.stringPosition();
 					}
-					
-					
-					
+						
 				}
+				else
+					return false;
 			}else if(this.emptySpot(end)) {
 				if(p.canMoveTo(end, this.gameBoard)) {
 					this.move(p,initial, end, inputs, allyTeam);
@@ -1021,10 +1020,7 @@ public class GameBoard {
 		char letterBefore = (char)(letter-1);
 		int number = Integer.parseInt(test.substring(1));
 		
-		
-//		if(contester == null) {
-		//	return false
-	//	}
+		whiteKingCheck();
 		if(letterBefore >= 'a'){
 			if(safeMove(test + " " + letterBefore + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterBefore + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterBefore + (number+1), allyTeam, enemyTeam))) 
 				return false;
@@ -1037,7 +1033,7 @@ public class GameBoard {
 			if(safeMove(test + " " + letterAfter + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterAfter + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterAfter + (number+1), allyTeam, enemyTeam))) 
 				return false;
 		}
-
+		whiteKingCheck();
 		//Is there more than one attacker? If so and king cannot move, checkmate.
 		
 		if(ATTACK > 1)
@@ -1062,18 +1058,22 @@ public class GameBoard {
 
 		//Can the attacker's path be blocked?
 		String[] validMoves = contester.getValidMoves(this.gameBoard);
+		
 		for(String spot : validMoves) {
 			for(String key : allyTeam.keySet()) {
 				ChessPiece defender = allyTeam.get(key);
-				if(defender.canMoveTo(spot, gameBoard) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam))
+				if(defender.canMoveTo(spot, gameBoard) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam)) {
 						return false;
+				}
 			}
 		}
 		//Can the attacker be captured?
 		for(String key : allyTeam.keySet()) {
 			ChessPiece defender = allyTeam.get(key);
-			if(defender.canCapture(contester.stringPosition(), this.gameBoard))
-					return false;
+			if(defender.canCapture(contester.stringPosition(), this.gameBoard) && safeMove(defender.stringPosition()+" "+contester.stringPosition(), allyTeam, enemyTeam)) {
+				return false;
+			}
+					
 		}
 		return true;
 	}
@@ -1090,9 +1090,7 @@ public class GameBoard {
 		
 	
 		blackKingCheck();
-//		if(contester == null) {
-		//	return false;
-	//	}
+
 		if(letterBefore >= 'a'){
 			if(safeMove(test + " " + letterBefore + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterBefore + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterBefore + (number+1), allyTeam, enemyTeam))) 
 				return false;
@@ -1106,7 +1104,7 @@ public class GameBoard {
 			if(safeMove(test + " " + letterAfter + number, allyTeam, enemyTeam) || ((number-1 > 0) && safeMove(test + " " + letterAfter + (number-1), allyTeam, enemyTeam)) || ((number+1<=8) && safeMove(test + " " + letterAfter + (number+1), allyTeam, enemyTeam))) 
 				return false;
 		}
-		
+		blackKingCheck();
 		//Is there more than one attacker? If so and king cannot move, checkmate.
 		
 		if(ATTACK > 1)
@@ -1121,6 +1119,7 @@ public class GameBoard {
 				String[] moves = defender.getValidMoves(this.gameBoard);
 				for(String spot: moves) {
 					if( (defender.canMoveTo(spot, this.gameBoard) || defender.canCapture(spot, this.gameBoard)) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam)) {
+						System.out.println(defender.stringPosition()+" "+spot);
 						return false;
 					}
 				}
@@ -1132,15 +1131,17 @@ public class GameBoard {
 		for(String spot : validMoves) {
 			for(String key : allyTeam.keySet()) {
 				ChessPiece defender = allyTeam.get(key);
-				if(defender.canMoveTo(spot, gameBoard) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam))
+				if(defender.canMoveTo(spot, gameBoard) && safeMove(defender.stringPosition()+" "+spot, allyTeam, enemyTeam)) {
 						return false;
+				}
 			}
 		}
 		//Can the attacker be captured?
 		for(String key : allyTeam.keySet()) {
 			ChessPiece defender = allyTeam.get(key);
-			if(defender.canCapture(contester.stringPosition(), this.gameBoard))
+			if(defender.canCapture(contester.stringPosition(), this.gameBoard) && safeMove(defender.stringPosition()+" "+contester.stringPosition(), allyTeam, enemyTeam)) {
 					return false;
+			}
 		}
 		return true;
 	}
