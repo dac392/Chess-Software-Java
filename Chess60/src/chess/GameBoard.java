@@ -350,7 +350,7 @@ public class GameBoard {
 					}					
 				}
 			}					
-			if(p.getName().contains("wp") || p.getName().contains("bp")) {
+			if(p instanceof Pawn) {
 				((Pawn) p).revert();
 				
 				isItPawn = true;
@@ -641,7 +641,7 @@ public class GameBoard {
 			return false;
 		if(allyTeam.containsKey(initial)) {
 			ChessPiece p = allyTeam.get(initial);
-			if(p.getName().contains("wp") || p.getName().contains("bp")) {
+			if(p instanceof Pawn) {
 				((Pawn)p).revert();
 				isItPawn = true;
 				int number = 1;
