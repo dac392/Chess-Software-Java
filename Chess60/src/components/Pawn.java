@@ -72,11 +72,6 @@ public class Pawn extends ChessPiece{
 		return posible;
 		
 	}
-	public static void main(String[] args) {
-		Pawn test = new Pawn(6,0,'p',1);
-		System.out.println(test.stringPosition());
-		Parser.printArray(test.getValidMoves());
-	}
 
 	public char wasMoved(String[] input) {
 		super.totalMoves = 1;

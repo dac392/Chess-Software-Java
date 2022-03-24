@@ -1,7 +1,12 @@
 package components;
 
 import util.Parser;
-
+/**
+ * ChessPiece class inherited by all other subclass ChessPieces
+ * @author DiegoCastellanos dac392
+ * @author AbidAzad aa2177
+ *
+ */
 public class ChessPiece {
 	public int x;
 	public int y;

@@ -5,7 +5,11 @@ import java.util.HashMap;
 
 import components.*;
 import util.Parser;
-
+/**
+ * GameBoard class used as the game board of the chess object. Handles logic regarding the chess board.
+ * @author DiegoCastellanos dac392
+ * @author AbidAzad aa2177
+ */
 public class GameBoard {
 	private HashMap<String, ChessPiece> white;
 	private HashMap<String, ChessPiece> black;
@@ -25,6 +29,10 @@ public class GameBoard {
 	private static final int ERROR = 0;
 	private static final int CORRECT = 1;
 	
+	/**
+	 * takes no arguments, and initiates a chess board along with the correct initial pieces.
+	 * the game board either contain and empty string "", or the a piece in the form Color and Type "bK"
+	 */
 	public GameBoard() {
 		this.player = 1;
 		this.gameBoard = new String[8][8];
@@ -33,11 +41,19 @@ public class GameBoard {
 		initGameboard();
 		
 	}
-	
+	/**
+	 * returns integer as the player number
+	 * @return player as an integer 1 for PLAYER_1 and -1 for PLAYER_2
+	 */
 	public int getPlayer() {
 		return player;
 	}
-	
+	/**
+	 * handles the main game board settup by:
+	 * 1. populating the gamboard with either the piece name of an empty string
+	 * 2. initializing all piece and populating black and white team hashmaps
+	 * 
+	 */
 	private void initGameboard() {
 		for(int i = 0; i < BOARD_SIZE; i++) {
 			for(int j = 0; j < BOARD_SIZE; j++) {
@@ -65,7 +81,10 @@ public class GameBoard {
 			}
 		}
 	}
-		
+	
+	/**
+	 * prints the gameboard to the console and decides the correct pattern for all empty spaces.
+	 */
 	public void printGameBoard() {
 		
 		System.out.println();
@@ -94,7 +113,9 @@ public class GameBoard {
 		System.out.println();
 		
 	}
-
+	/**
+	 * debuging statement used for print black and white team pieces
+	 */
 	public void printHashMaps() {
 		System.out.println("\nBLACK MAP");
 		for(String key : black.keySet()) {
@@ -108,7 +129,11 @@ public class GameBoard {
 		}
 	}
 
-	
+	/**
+	 * driver for black team moves
+	 * @param instruction string
+	 * @return valid move status; 0 for ERROR and 1 for CORRECT
+	 */
 	public int blackMoveManager(String in) {	// if you make a move, you should update player*=-1
 		HashMap<String, ChessPiece> allyTeam = this.black;
 		HashMap<String, ChessPiece> enemyTeam = this.white;
@@ -117,7 +142,11 @@ public class GameBoard {
 		
 		return ERROR;
 	}
-	
+	/**
+	 * driver for white team moves
+	 * @param instruction string
+	 * @return valid move status; 0 for ERROR and 1 for CORRECT
+	 */
 	public int whiteMoveManager(String in) {	// if you make a move, you should update player*=-1
 		HashMap<String, ChessPiece> allyTeam = this.white;
 		HashMap<String, ChessPiece> enemyTeam = this.black;
@@ -126,6 +155,13 @@ public class GameBoard {
 		
 		return ERROR;
 	}
+	/**
+	 * called by both whiteMoveManager and blackMoveManager, handles all actual logic for deciding moves.
+	 * @param input string
+	 * @param allyTeam hashmap pieces
+	 * @param enemyTeam hashmap pieces
+	 * @return boolean denoting the semantics of the input and the validity of a move
+	 */
 	public boolean regularMove(String in, HashMap<String, ChessPiece> allyTeam, HashMap<String, ChessPiece> enemyTeam) {
 		String[] inputs = in.split(" ");
 		String initial = inputs[0];
@@ -561,6 +597,13 @@ public class GameBoard {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param in
+	 * @param safe2
+	 * @param safe
+	 * @return boolean deciding whether a move is safe to be made
+	 */
 	public boolean safeMove(String in, HashMap<String, ChessPiece> safe2, HashMap<String, ChessPiece> safe) { //Theoretically should perform a move and check if the king is safe. Regardless, should return board back to what it was before returning.
 		String[] inputs = in.split(" ");
 		String initial = inputs[0];
@@ -877,7 +920,10 @@ public class GameBoard {
 		}
 		return true;
 	}	
-	//theoretically should work
+	/**
+	 * Checks if the white king is under check condition
+	 * @return boolean deciding if whiteKing is under check or not
+	 */
 	public boolean whiteKingCheck() {
 		int whiteKingX = whiteKingPosition[0];
 		int whiteKingY = whiteKingPosition[1];
@@ -1155,6 +1201,10 @@ public class GameBoard {
 		return false;
 	}
 	
+	/**
+	 * Checks if the black king is under check condition
+	 * @return boolean deciding if blackKing is under check or not
+	 */
 	public boolean blackKingCheck() {
 		int blackKingX = blackKingPosition[0];
 		int blackKingY = blackKingPosition[1];
@@ -1432,6 +1482,10 @@ public class GameBoard {
 		return false;
 	}	
 	
+	/**
+	 * decides whether white team has any moves left that it can make
+	 * @return boolean
+	 */
 	public boolean whiteNoPossibleMoves() { //W.I.P
 		
 		String test = whitePosition;
@@ -1511,6 +1565,10 @@ public class GameBoard {
 		return true;
 	}
 
+	/**
+	 * decides whether black team has any moves left that it can make
+	 * @return boolean
+	 */
 	public boolean blackNoPossibleMoves() { //W.I.P
 		String test = blackPosition;
 		HashMap<String, ChessPiece> allyTeam = this.black;
@@ -1588,6 +1646,15 @@ public class GameBoard {
 		}
 		return true;
 	}
+	
+	/**
+	 * handles all logic for actually executing a move. checks whether the piece moves was a pawn an promotes it accordingly
+	 * @param ChessPiece p
+	 * @param String source
+	 * @param String target
+	 * @param String[] inputs
+	 * @param HashMap allyTeam
+	 */
 	private void move(ChessPiece p, String source, String target, String[] inputs, HashMap<String, ChessPiece> allyTeam) {
 		int[] origin = p.getPosition();
 		int[] dest = Parser.translate(target);
@@ -1612,16 +1679,28 @@ public class GameBoard {
 		}
 	}
 	
+	/**
+	 * Finds the integer position of white king
+	 * @return int[] position of whiteKing
+	 */
 	public int[] getWhiteKing() {
 		System.out.println("White King is at x-"+whiteKingPosition[0]+" and y-"+whiteKingPosition[1]);
 		return whiteKingPosition;
 	}
+	/**
+	 * Finds the integer position of black king
+	 * @return int[] position of blackKing
+	 */
 	public int[] getBlackKing() {
 		System.out.println("Black King is at x-"+blackKingPosition[0]+" and y-"+blackKingPosition[1]);
 		return blackKingPosition;
 	}
 	
-
+	/**
+	 * returns whether the position on a board is an empty spot or not
+	 * @param String end target position from instruction
+	 * @return boolean
+	 */
 	private boolean emptySpot(String end) {
 		int[] position = Parser.translate(end);
 		if(this.gameBoard[position[0]][position[1]].isBlank() || this.gameBoard[position[0]][position[1]].contains("##")) {
